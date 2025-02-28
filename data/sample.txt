@@ -1,0 +1,6 @@
+SRR15646844  F  freeborni
+SRR15646845  F  freeborni
+SRR20493030  F  martinius
+SRR20493031  M  melanoon
+SRR20493032  F  persiensis
+SRR20493034  M  artemievi
