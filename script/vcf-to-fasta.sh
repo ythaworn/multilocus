@@ -87,4 +87,9 @@ for f in $dvcf/*.vcf.gz; do
     # clean up
     rm $fregion $ftmp
   fi
+
+  # clean up
+  if [ -f $fin.tbi ]; then 
+    rm $fin.tbi
+  fi
 done
