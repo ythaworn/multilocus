@@ -21,7 +21,7 @@ ddata=$wd/data/fastq
 
 ## variant filtering ##
 minDP=20   # min read depth
-maxDP=100  # max read depth
+maxDP=300  # max read depth
 minGQ=20   # min GQ score
 
 
