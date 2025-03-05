@@ -77,7 +77,7 @@ done
 
 
 ## convert vcf to fasta ##
-ftmp=tmp.txt
+ftmp=$wd/tmp.txt
 while IFS=" " read -r pop; do
   for region_full in $refname.coding.100.1000000.2000 $refname.intron.100.1000.2000 $refname.noncod.100.1000.2000; do
     $dscript/vcf-to-fasta.sh $wd $refname $dref $pop $minDP $region_full >> $ftmp 2>&1
