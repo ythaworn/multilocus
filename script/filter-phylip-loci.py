@@ -126,10 +126,10 @@ def main():
   dref = sys.argv[5]  # locus data
 
   # row filter
-  missing_prop_cutoff_row = sys.argv[6]
+  missing_prop_cutoff_row = float(sys.argv[6])
 
   # column filter
-  missing_prop_cutoff_col = sys.argv[7]
+  missing_prop_cutoff_col = float(sys.argv[7])
   flag = sys.argv[8]
 
   # minimun number of sequences per locus
