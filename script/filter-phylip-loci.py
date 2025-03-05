@@ -1,4 +1,4 @@
-#!/usr/local/bin/python3
+#!/usr/local/bin/python
 
 '''
 Loop over loci
@@ -10,7 +10,6 @@ Loop over loci
 import sys
 import re
 import os
-import math
 
 
 def filter_loci(dir_in, dir_out, mindp, f_loci, wd, missing_prop_cutoff_row, missing_prop_cutoff_col, min_num_sqs, verbose):
@@ -127,11 +126,11 @@ def main():
   dref = sys.argv[5]  # locus data
 
   # row filter
-  missing_prop_cutoff_row = 0.5
+  missing_prop_cutoff_row = sys.argv[6]
 
   # column filter
-  missing_prop_cutoff_col = 0.5
-  flag = 'f50'
+  missing_prop_cutoff_col = sys.argv[7]
+  flag = sys.argv[8]
 
   # minimun number of sequences per locus
   min_num_sqs = 2

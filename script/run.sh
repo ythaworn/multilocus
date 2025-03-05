@@ -19,10 +19,18 @@ fploidy=$dref/$refname.ploidy.txt
 ## directory containing input fastq files ##
 ddata=$wd/data/fastq
 
+## final output ##
+dout=$wd/out/multilocus
+
 ## variant filtering ##
 minDP=20   # min read depth
 maxDP=300  # max read depth
 minGQ=20   # min GQ score
+
+## alignment filtering options ##
+missing_prop_cutoff_row=0.5
+missing_prop_cutoff_col=0.5
+aln_filt_flag=f50
 
 
 ## START ##
@@ -86,10 +94,13 @@ for region_full in $refname.coding.100.1000000.2000 $refname.intron.100.1000.200
   $dscript/fasta-to-phylip.sh $wd $minDP $region_full
 
   ## filter phylip ##
-  python3 filter-phylip-loci.py $wd $refname $minDP $region_full $dref >> $flog 2>&1
+  python $dscript/filter-phylip-loci.py $wd $refname $minDP $region_full $dref $missing_prop_cutoff_row $missing_prop_cutoff_col $aln_filt_flag >> $flog 2>&1
 
-  ## make blocks ##
-  python3 make-blocks.py $wd $refname $minDP $region_full $dref >> $flog 2>&1
+  ## OPTIONAL: make blocks ##
+  python $dscript/make-blocks.py $wd $refname $minDP $region_full $dref $aln_filt_flag >> $flog 2>&1
+
+  ## move output files to final location  ##
+  $dscript/output.sh $wd $minDP $region_full $dout $aln_filt_flag
 done
 
 echo "We're done!"

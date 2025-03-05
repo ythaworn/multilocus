@@ -1,4 +1,4 @@
-#!/usr/local/bin/python3
+#!/usr/local/bin/python
 
 '''
 Convert group-level vcf files from gatk genotypeGVCFs into sequence alignment
@@ -137,6 +137,7 @@ def main():
   mindp = sys.argv[3]
   region_full = sys.argv[4]
   dref = sys.argv[5]  # locus data
+  flag = sys.argv[6]
 
   blocksizes = [100]
   last_block_size_cutoff = {100: 40}
@@ -145,9 +146,6 @@ def main():
   # verbose = True
 
   dout = wd + '/out/dset'
-
-  # matching output from filter-phylip-loci.py
-  flag = 'f50'
 
   dir_in  = '3.phylip_filtered_' + flag
   dir_out = '4.multilocus_' + flag
