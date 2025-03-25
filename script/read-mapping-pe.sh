@@ -40,11 +40,11 @@ ftmp=$ddepth/$id.tmp.txt
 
 if [ ! -f $fmdk ]; then
   bwa mem -t $CPU -R "@RG\\tID:${id}\\tSM:${id}\\tPL:Illumina" -M $ref $f1 $f2 | gzip -3 > $fsam
-  samtools fixmate -O bam $fsam $ffixmate
+  samtools fixmate -m -O bam $fsam $ffixmate
   samtools sort -O bam -o $fbam -@ $CPU $ffixmate
 
   # mark duplicate
-  gatk --java-options "-Xmx1g" MarkDuplicates -I $fbam -O $fmdk -M $fmdk_txt --REMOVE_DUPLICATES
+  samtools markdup -r $fbam $fmdk
 
   samtools index $fmdk
   samtools flagstat $fmdk > $dout/$id.flagstat.txt

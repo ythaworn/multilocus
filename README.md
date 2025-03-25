@@ -17,9 +17,8 @@ Multilocus sequence data in phylip format suitable for [bpp](https://github.com/
 
 # Requirements
 - [`bwa`](https://github.com/lh3/bwa)
-- [`samtools`, `bcftools`](https://www.htslib.org/download/)
+- [`samtools`, `bcftools`, `tabix`](https://www.htslib.org/download/)
 - [`bedtools`](https://bedtools.readthedocs.io/en/latest/content/installation.html)
-- [`gatk`](https://github.com/broadinstitute/gatk) for `MarkDuplicates`
 - optional: `R` with package `optparse`
 
 # Usage
