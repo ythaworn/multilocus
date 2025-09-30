@@ -19,7 +19,8 @@ Multilocus sequence data in phylip format suitable for [bpp](https://github.com/
 - [`bwa`](https://github.com/lh3/bwa)
 - [`samtools`, `bcftools`, `tabix`](https://www.htslib.org/download/)
 - [`bedtools`](https://bedtools.readthedocs.io/en/latest/content/installation.html)
+- `python`
 - optional: `R` with package `optparse`
 
 # Usage
-See [tutorial](https://github.com/ythaworn/multilocus/wiki)
+See [tutorial](https://github.com/ythaworn/multilocus/wiki/Tutorial)
