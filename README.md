@@ -13,7 +13,7 @@ Generate multilocus sequence data from short-read sequencing data.
   * [ploidy file](https://samtools.github.io/bcftools/bcftools.html#ploidy): `<ref>.ploidy.txt`
 
 Optional
-- info for grouping loci into blocks: `block_info.txt>`, two columns: block size, minimum size for the last block to be included
+- info for grouping loci into blocks: `block_info.txt`, two columns: block size, minimum size for the last block to be included
 
 # Outputs
 Multilocus sequence data in phylip format suitable for [bpp](https://github.com/bpp/bpp) analysis.
