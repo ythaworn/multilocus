@@ -555,8 +555,6 @@ transfer_output() {
       # loop over regions
       for dir in "$dsource"/*/; do
         d=$(basename ${dir%*/})
-        echo "block$b $d"
-
         mv "${dsource}/$d" "${dtarget}/"
       done
     done
