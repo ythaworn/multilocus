@@ -1,4 +1,4 @@
-#!/usr/local/bin/python
+#!/usr/local/bin/python3
 
 '''
 Loop over loci
@@ -10,6 +10,7 @@ Loop over loci
 import sys
 import re
 import os
+import math
 
 
 def filter_loci(dir_in, dir_out, mindp, f_loci, wd, missing_prop_cutoff_row, missing_prop_cutoff_col, min_num_sqs, verbose):
@@ -118,7 +119,6 @@ def filter_loci(dir_in, dir_out, mindp, f_loci, wd, missing_prop_cutoff_row, mis
 
 
 def main():
-
   wd = sys.argv[1]
   refname = sys.argv[2]
   mindp = sys.argv[3]

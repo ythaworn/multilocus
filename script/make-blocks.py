@@ -1,4 +1,4 @@
-#!/usr/local/bin/python
+#!/usr/local/bin/python3
 
 '''
 Convert group-level vcf files from gatk genotypeGVCFs into sequence alignment
@@ -15,7 +15,7 @@ import re
 import os
 
 
-def make_multilocus_block(dir_in, dir_out, blocksizes, mindp, f_loci, fout_prefix, wd, last_block_size_cutoff, thin, verbose):
+def make_multilocus_block(dir_in, dir_out, mindp, f_loci, fout_prefix, wd, last_blocksize_cutoff, thin, makeblock, blocksizes, verbose):
 
   ## STEP 1: # combine loci into a single file
   out = os.path.basename(f_loci).replace('.bed', '')
@@ -84,64 +84,70 @@ def make_multilocus_block(dir_in, dir_out, blocksizes, mindp, f_loci, fout_prefi
 
 
   ## STEP 2: split into blocks
-  for b in blocksizes:
-    print('block' + str(b))
+  if makeblock:
+    for b in blocksizes:
+      print('block' + str(b))
 
-    dir_out_block = dir_out + '_block' + str(b)
-  
-    # optional: skip some loci
-    if thin:
-      f_loci = f_loci.replace('.bed', '.' + thin + '.bed')
-      dir_out += '_' + thin
-      dir_out_block += '_' + thin
+      dir_out_block = dir_out + '_block' + str(b)
     
-    for chrom in chrom_label:
-      fname = fout_prefix + chrom + '.txt'
-      fin = os.path.join(dout, fname)
-
-      dout_block = os.path.join(wd, out, dir_out_block, 
-        'minDP' + mindp, fout_prefix + chrom)
-      if not os.path.exists(dout_block): os.makedirs(dout_block)
-
-      # count #blocks
-      num_blocks = len(chrom_label[chrom]) // b + 1
-      last_block_size = len(chrom_label[chrom]) % b
-
-      # combine last block with the preceding one
-      if num_blocks > 1 and last_block_size > 0 and last_block_size < last_block_size_cutoff[b]:
-        num_blocks -= 1
+      # optional: skip some loci
+      if thin:
+        f_loci = f_loci.replace('.bed', '.' + thin + '.bed')
+        dir_out += '_' + thin
+        dir_out_block += '_' + thin
       
-      print(' {}: {:3d} block{} (last block: {})'.format(chrom, num_blocks, 's' if num_blocks > 1 else '', last_block_size))
+      for chrom in chrom_label:
+        fname = fout_prefix + chrom + '.txt'
+        fin = os.path.join(dout, fname)
 
-      for k in range(num_blocks):
-        first_locus = k * b
-        last_locus = (k + 1) * b if k < num_blocks - 1 else len(chrom_label[chrom])
+        dout_block = os.path.join(wd, out, dir_out_block, 
+          'minDP' + mindp, fout_prefix + chrom)
+        if not os.path.exists(dout_block): os.makedirs(dout_block)
+
+        # count #blocks
+        num_blocks = len(chrom_label[chrom]) // b + 1
+        last_block_size = len(chrom_label[chrom]) % b
+
+        # combine last block with the preceding one
+        if num_blocks > 1 and last_block_size > 0 and last_block_size < last_blocksize_cutoff[b]:
+          num_blocks -= 1
         
-        # print(k, first_locus, last_locus)
+        print(' {}: {:3d} block{} (last block: {})'.format(chrom, num_blocks, 's' if num_blocks > 1 else '', last_block_size))
 
-        fout = os.path.join(dout_block, '{:03d}.txt'.format(k + 1))
-        f = open(fout, 'w')
+        for k in range(num_blocks):
+          first_locus = k * b
+          last_locus = (k + 1) * b if k < num_blocks - 1 else len(chrom_label[chrom])
+          
+          # print(k, first_locus, last_locus)
 
-        for i_locus in chrom_label[chrom][first_locus:last_locus]:
-          for l in sqs[i_locus]:
-            f.write(l)
-          f.write('\n')
+          fout = os.path.join(dout_block, '{:03d}.txt'.format(k + 1))
+          f = open(fout, 'w')
 
-        f.close()
+          for i_locus in chrom_label[chrom][first_locus:last_locus]:
+            for l in sqs[i_locus]:
+              f.write(l)
+            f.write('\n')
+
+          f.close()
 
 
 def main():
-
   wd = sys.argv[1]
   refname = sys.argv[2]
   mindp = sys.argv[3]
   region_full = sys.argv[4]
   dref = sys.argv[5]  # locus data
   flag = sys.argv[6]
+  makeblock = sys.argv[7]
+  fblock = sys.argv[8]
 
-  blocksizes = [100]
-  last_block_size_cutoff = {100: 40}
+  # parse block info
+  with open(fblock) as f:
+    lines = [line.strip() for line in f]
 
+  last_blocksize_cutoff = {int(x[0]): int(x[1]) for x in (line.split() for line in lines)}
+  blocksizes = [*last_blocksize_cutoff]
+  
   verbose = False
   # verbose = True
 
@@ -157,7 +163,7 @@ def main():
   fout_prefix = os.path.basename(f_loci).replace('.bed', '') + '_'
 
   print('\n' 'minDP' + mindp, dir_in, '->', dir_out, thin)
-  make_multilocus_block(dir_in, dir_out, blocksizes, mindp, f_loci, fout_prefix, dout, last_block_size_cutoff, thin, verbose)
+  make_multilocus_block(dir_in, dir_out, mindp, f_loci, fout_prefix, dout, last_blocksize_cutoff, thin, makeblock, blocksizes, verbose)
 
 
 if __name__ == '__main__':
