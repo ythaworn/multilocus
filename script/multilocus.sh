@@ -130,9 +130,10 @@ genotyping_bcftools() {
   pop="$4"
   sample_info="$5"  # for sex info
   fploidy="$6"
-  minDP=$7
-  maxDP=$8
-  minGQ=$9
+  
+  minDP="$7"
+  maxDP="$8"
+  minGQ="$9"
 
   # directories
   local din="$wd/out/bam"
@@ -175,7 +176,7 @@ genotyping_bcftools() {
     done
 
     # genotyping using bcftools mpileup & bcftools call
-    bcftools mpileup -B -Q "$q" -Ou -f "$ref" "${ff[@]}" --annotate INFO/AD,FORMAT/AD,FORMAT/DP \
+    bcftools mpileup -B -Ou -f "$ref" "${ff[@]}" --annotate INFO/AD,FORMAT/AD,FORMAT/DP \
       | bcftools call --annotate GQ -vmO z --ploidy-file "$fploidy" -S "$fsample" -o "$fvcf"
 
     # filter
@@ -577,7 +578,7 @@ main() {
   declare -a region_list=(
     "$refname.coding.100.1000000.2000"
     "$refname.intron.100.1000.2000"
-    "$refname.noncod.100.1000.200"
+    "$refname.noncod.100.1000.2000"
   )
 
 
